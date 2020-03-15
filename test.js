@@ -1,3 +1,9 @@
+import { displayLineChart } from "./linechart.js";
+
+//labels data
+const weekLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+
 
 function format(date) {
     var d = date.getDate();
@@ -5,55 +11,40 @@ function format(date) {
     var y = date.getFullYear();
     return "" + y + "-" + (m <= 9 ? "0" + m : m) + "-" + (d <= 9 ? "0" + d : d);
   }
-  
-  function getCurrentDate() {
-    let date = new Date();
-    let day = date.getDate();
-    let month = date.getMonth() + 1;
-    let year = date.getFullYear();
-    return `${year}-${month}-${day}`;
-  }
-  let currentDate = getCurrentDate();
-  
+var initialDate = new Date();
+initialDate.setDate(initialDate.getDate() - 6);
+console.log(initialDate);
+let currentdate = new Date();
+
+function getDateRange(){
   var now = new Date();
   var daysOfYear = [];
-  for (var d = new Date(2020, 1, 1); d <= now; d.setDate(d.getDate() + 1)) {
-    daysOfYear.push(format(new Date(d)));
+  for (var d = new Date(initialDate.getFullYear(), initialDate.getMonth(), initialDate.getDate()); d < now; d.setDate(d.getDate() + 1)) {
+      daysOfYear.push(format(new Date(d)));
   }
+  return daysOfYear;
+}
 
-//   function convert() {
-//     // Unixtimestamp
-//     var unixtimestamp = 1577491200;
-  
-//     // Convert timestamp to milliseconds
-//     var date = new Date(unixtimestamp * 1000);
-  
-//     // Year
-//     var year = date.getFullYear();
-  
-//     // Month
-//     var month = date.getMonth() + 1;
-  
-//     // Day
-//     var day = date.getDate();
-  
-//     // Display date time in MM-dd-yyyy format
-//     var convdataTime = `${year}-${month}-${day}`;
-  
-//     console.log(convdataTime);
-//   }
-  
-//   convert();
-var myHeaders = new Headers();
-myHeaders.append("XF-Api-Key", "IxpVwsj_vR-AkKMRLAkPKqrSL0FmxThM");
-
-var requestOptions = {
-  method: 'POST',
-  headers: myHeaders,
-  redirect: 'follow'
-};
-
-fetch("http://d1.gotoproject.net/xf212/api/download-stats?week=2020-03-13", requestOptions)
-  .then(response => response.text())
-  .then(result => console.log(result))
-  .catch(error => console.log('error', error));
+function getWeekData(){
+    let downloads = [];
+    let fetchResult = JSON.parse(data);
+    let dateRange = getDateRange();
+    let results = fetchResult.data;
+    console.log(dateRange);
+    console.log(results);
+    for(let i=0; i<dateRange.length; i++){
+      let match = false;
+      for(let j =0; j<results.length;j++){
+        if(dateRange[i] == Object.values(results[j])[0]){
+          match = true;
+          downloads.push(Object.values(results[j])[1])
+          break;
+        }
+      }
+      if(!match){
+        downloads.push("0")
+      }
+    }
+    return downloads
+}
+export  {getWeekData}
