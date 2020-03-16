@@ -20,11 +20,11 @@ function displayLineChart(labels, xLabel, data) {
         scales: {
             yAxes: [
               {
-                scaleLabel: {
-                  display: true,
-                  labelString: "Number of Downloads"
+                ticks: {
+                  beginAtZero: true,
+                  callback: function(value) {if (value % 1 === 0) {return value}}
                 }
-              }
+              },
             ],
             xAxes: [
               {

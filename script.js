@@ -27,7 +27,6 @@ setTimeout(() => mainFunction(), 1000);
 
 function mainFunction() {
   let data = JSON.parse(resp);
-  console.log(data);
   let downloadData = cleanData(data);
   //One Week
   let weekData = getWeekData(downloadData);
